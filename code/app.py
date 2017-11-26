@@ -7,9 +7,9 @@ items = []
 
 class Item(Resource):
     def get(self, name):
-        for i in items:
-            if i['name'] == name:
-                return i
+        for item in items:
+            if item['name'] == name:
+                return item
         return {'name': None} 
 
 
