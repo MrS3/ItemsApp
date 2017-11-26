@@ -7,10 +7,7 @@ items = []
 
 class Item(Resource):
     def get(self, name):
-        for item in items:
-            if item['name'] == name:
-                return item
-        return {'name': None} 
+        return next(filter(lambda x: x['name'] == name, items), {'item': None})
 
 
     def post(self, name):
