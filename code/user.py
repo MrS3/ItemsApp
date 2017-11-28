@@ -9,30 +9,27 @@ class User:
 
     @classmethod
     def find_by_username(cls,username):
-        connection = sqlite3.connect('data.db')
-        cursor = connection.cursor()
-        query = "SELECT * FROM users WHERE username=?"
-        result = cursor.execute(query, (username,))
-        row = result.fetchone()
-        if row:
-            user = cls(*row)
-        else:
-            user = None
-        
-        connection.close()
-        return user
+        return User.databaseQuery(cls, username, "SELECT * FROM users WHERE username=?")
+
 
     @classmethod
     def find_by_id(cls,_id):
+        return User.databaseQuery(cls, _id, "SELECT * FROM users WHERE id=?")
+
+    @classmethod
+    def databaseQuery(objc = None, _id = None, username = None, query = None):
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
-        query = "SELECT * FROM users WHERE id=?"
-        result = cursor.execute(query, (_id,))
+        if username:
+            result = cursor.execute(query, (username,))
+        else: 
+            result = cursor.execute(query, (_id,))    
+        
         row = result.fetchone()
         if row:
-            user = cls(*row)
+            user = objc(*row)
         else:
             user = None
-        
         connection.close()
         return user
+

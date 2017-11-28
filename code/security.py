@@ -1,13 +1,6 @@
 from werkzeug.security import safe_str_cmp
 from user import User
 
-users = [
-    User(1, "Piotr", "asdf")
-]
-
-username_mapping = {item.username: item for item in users}
-userid_mapping = {item.id: item for item in users}
-
 def authenticate(username, password):
     user = User.find_by_username(username)
     if user and safe_str_cmp(user.password, password):
