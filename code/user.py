@@ -20,16 +20,7 @@ class User:
     def databaseQuery(objc = None, _id = None, username = None, query = None):
         connection = sqlite3.connect('data.db')
         cursor = connection.cursor()
-        if username:
-            result = cursor.execute(query, (username,))
-        else: 
-            result = cursor.execute(query, (_id,))    
-        
+        result = cursor.execute(query,(username,)) if username else cursor.execute(query, (_id,))
         row = result.fetchone()
-        if row:
-            user = objc(*row)
-        else:
-            user = None
         connection.close()
-        return user
-
+        return objc(*row) if row else None  
