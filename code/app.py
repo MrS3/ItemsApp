@@ -1,60 +1,17 @@
-from flask import Flask, request
-from flask_restful import Resource, Api, reqparse
-from flask_jwt import JWT, jwt_required
+from flask import Flask
+from flask_restful import Api
+from flask_jwt import JWT
 from security import authenticate, identity
+from user import UserRegister
+from item import Item, ItemList
 
 app = Flask(__name__)
 app.secret_key = 'secret123'
 api = Api(app)
 jwt = JWT(app, authenticate, identity)
-
-items = []
-
-class Item(Resource):
-    @jwt_required()
-    def get(self, name):
-        return next(filter(lambda x: x['name'] == name, items), {'item': None})
-
-    def post(self, name):
-        if next(filter(lambda x: x['name'] == name, items), None):
-            return { 'message' : 'An item with name {0} already exist'.format(name)}, 400
-
-
-        data = request.get_json()
-        item = {'name': name, 'price': data['price']}
-        items.append(item)
-        return item , 201
-
-    def delete(self, name):
-        global items
-        items = list(filter(lambda item: item['name'] != name, items))
-        return {'message': 'Item deleted'}, 400
-
-
-    def put(self, name):
-        parser = reqparse.RequestParser()
-        parser.add_argument('price',
-            type=float,
-            required=True,
-            help="This field cannot be left blank"
-        )
-        data = parser.parse_args()
-        
-        item = next(filter(lambda item: item['name'] == name, items), None)
-        if item is None:
-            item = {'name': name, 'price': data['price']}
-            items.append(item)
-        else:
-            item.update(data)
-        return item
-
-
-class ItemList(Resource):
-    def get(self):
-        return {'items': items}, 200
-
-
 api.add_resource(Item, '/item/<string:name>')
 api.add_resource(ItemList, '/items')
-app.run(port=5000, debug=True)
+api.add_resource(UserRegister, '/register')
+if __name__ == "__main__":
+    app.run(port=5000, debug=True)
 
