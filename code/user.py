@@ -11,11 +11,11 @@ class User:
 
     @classmethod
     def find_by_username(cls,username):
-        return cls(*selectItem("SELECT * FROM users WHERE username=?", username)
+        return cls(*selectItem("SELECT * FROM users WHERE username=?", username))
 
     @classmethod
     def find_by_id(cls,_id):
-        return cls(*selectItem("SELECT * FROM users WHERE id=?", username))
+        return cls(*selectItem("SELECT * FROM users WHERE id=?", _id))
 
 
 class UserRegister(Resource):
