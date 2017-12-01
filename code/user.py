@@ -1,6 +1,6 @@
 import sqlite3
 from flask_restful import Resource, reqparse
-from database import selectItem, insertItem
+from database import selectItem, manageItem
 
 class User:
 
