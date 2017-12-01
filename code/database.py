@@ -9,7 +9,7 @@ def selectItem(query, *args):
      return row
 
 
-def insertItem(query, args):
+def manageItem(query, args):
     connection = sqlite3.connect('data.db')
     cursor = connection.cursor()
     cursor.execute(query, args)
