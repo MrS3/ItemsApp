@@ -2,6 +2,7 @@ import sqlite3
 from flask_restful import Resource, reqparse
 from flask_jwt import JWT, jwt_required
 from database import selectItem, manageItem
+from item_model import ItemModel
 
 class Item(Resource):
     parser = reqparse.RequestParser()
@@ -22,14 +23,13 @@ class Item(Resource):
 
     def post(self, name):
         data = Item.parser.parse_args()
+        itemModel = ItemModel(name, data['price'])
         
-        if  self.find_by_ItemName(name):
+        if  ItemModel.find_by_ItemName(itemModel.name):
             return {'message': 'Item already exist'}, 400
-
-        item = {'name': name, 'price': data['price']}
         
         try:
-            self.manageItem(item)
+            itemModel.manageItem(itemModel)
         except:
             return self.errorMessage()
 
@@ -38,16 +38,16 @@ class Item(Resource):
     def put(self, name):
         data = Item.parser.parse_args()
         updated_item = {'name': name, 'price': data['price']}
-        item = self.find_by_ItemName(name)
+        itemModel = ItemModel.find_by_ItemName(name)
 
-        if item is None:
+        if itemModel is None:
             try:
-                self.manageItem(updated_item)
+                itemModel.manageItem(updated_item)
             except:
                return self.errorMessage()
         else:
             try: 
-                manageItem("UPDATE items SET price=? WHERE name=?", (data['price'], name))
+                itemModel.updateItem(data['price'])
             except:
                return self.errorMessage()
     

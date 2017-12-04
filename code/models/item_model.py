@@ -5,10 +5,23 @@ class ItemModel:
         self.name = name
         self.price = price
 
-    def manageItem(self , item):
-        manageItem("INSERT INTO items VALUES(?,?)", (item['name'], item['price']))
+    def json(self):
+        return {'name' : self.name, 'price': self.price}
+
+    def manageItem(self):
+        manageItem("INSERT INTO items VALUES(?,?)", (self.name, self.price))
+
+    def updateItem(self, price):
+        manageItem("UPDATE items SET price=? WHERE name=?", (price, self.name)) 
+    
+    @classmethod    
+    def deleteItem(cls, name):
+        manageItem("DELETE FROM items WHERE name=?", (name,))
+        return {'message': 'Item deleted'}, 400
+
+    @classmethod
+    def find_by_ItemName(cls, name):
+        row = selectItem("SELECT * FROM items WHERE name=?", name)
+        return cls(*row) if row else None
 
     
-    def find_by_ItemName(self, name):
-        item = selectItem("SELECT * FROM items WHERE name=?", name)
-        return item if item else None
