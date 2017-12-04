@@ -8,10 +8,20 @@ def selectItem(query, *args):
      connection.close()
      return row
 
-
-def manageItem(query, args):
+def insertItem(query, args):
     connection = sqlite3.connect('data.db')
     cursor = connection.cursor()
     cursor.execute(query, args)
     connection.commit()
     connection.close()
+
+def selectAllItems(query):
+    connection = sqlite3.connect('data.db')
+    cursor = connection.cursor()
+    result = cursor.execute(query)
+    items = []
+    for row in result:
+        print(row)
+        items.append({'name' : row[0], 'price' : row[1]})
+    connection.close()
+    return items   

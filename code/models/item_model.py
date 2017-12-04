@@ -1,4 +1,4 @@
-from database import manageItem, selectItem
+from database import insertItem, selectItem, selectAllItems
 
 class ItemModel:
     def __init__(self, name, price):
@@ -14,6 +14,10 @@ class ItemModel:
     def updateItem(self, price):
         manageItem("UPDATE items SET price=? WHERE name=?", (price, self.name)) 
     
+    @classmethod
+    def fetchAllItems(self):
+        return selectAllItems("SELECT * FROM items") , 200
+
     @classmethod    
     def deleteItem(cls, name):
         manageItem("DELETE FROM items WHERE name=?", (name,))
