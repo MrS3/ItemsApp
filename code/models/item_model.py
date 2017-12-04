@@ -6,10 +6,10 @@ class ItemModel:
         self.price = price
 
     def json(self):
-        return {'name' : self.name, 'price': self.price}
+        return {'name' : self.name, 'price' : self.price}
 
-    def manageItem(self):
-        manageItem("INSERT INTO items VALUES(?,?)", (self.name, self.price))
+    def insertItem(self):
+         manageItem("INSERT INTO items VALUES(?,?)", (self.name, self.price))
 
     def updateItem(self, price):
         manageItem("UPDATE items SET price=? WHERE name=?", (price, self.name)) 
@@ -24,4 +24,3 @@ class ItemModel:
         row = selectItem("SELECT * FROM items WHERE name=?", name)
         return cls(*row) if row else None
 
-    
