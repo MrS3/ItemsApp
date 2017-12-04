@@ -60,16 +60,6 @@ class Item(Resource):
     def errorMessage(self):
         return { 'message' : "An error occurred inserting the item" }, 500
 
-
-    @classmethod
-    def manageItem(cls , item):
-        manageItem("INSERT INTO items VALUES(?,?)", (item['name'], item['price']))
-
-    @classmethod
-    def find_by_ItemName(cls, name):
-        item = selectItem("SELECT * FROM items WHERE name=?", name)
-        return item if item else None
-
 class ItemList(Resource):
     def get(self):
         return {'items': items}, 200

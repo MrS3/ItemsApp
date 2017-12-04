@@ -1,24 +1,7 @@
 import sqlite3
 from flask_restful import Resource, reqparse
 from database import selectItem, manageItem
-
-class User:
-
-    def __init__(self, _id, username, password):
-        self.id = _id
-        self.username = username
-        self.password = password
-
-    @classmethod
-    def find_by_username(cls,username):
-        row = selectItem("SELECT * FROM users WHERE username=?", username)
-        return cls(*row) if row else None
-
-    @classmethod
-    def find_by_id(cls,_id):
-        row = selectItem("SELECT * FROM users WHERE id=?", _id)
-        return cls(*row) if row else None
-
+from user_model import UserModel
 
 class UserRegister(Resource):
     
@@ -38,7 +21,7 @@ class UserRegister(Resource):
     def post(self):
         data = UserRegister.parser.parse_args()
 
-        if User.find_by_username(data['username']):
+        if UserModel.find_by_username(data['username']):
             return {'message': 'A user with that username already exist'}, 400
 
         insertItem("INSERT INTO users VALUES (NULL, ?, ?)", (data['username'], data['password']))
