@@ -18,15 +18,15 @@ class ItemModel(db.Model):
          db.session.add(self)
          db.session.commit()
 
-    @classmethod
-    def fetchAllItems(self):
-        return selectAllItems("SELECT * FROM items") , 200
-
-    @classmethod    
-    def delete_from_database(cls):
+    def delete_from_database(self):
         db.session.delete(self)
         db.session.commit()
 
+    @classmethod
+    def fetchAllItems(cls):
+       # return {'items' : list(map(lambda item: item.json(), ItemModel.query.all()))}
+        return {'items' : [item.json() for item in ItemModel.query.all()]}
+   
     @classmethod
     def find_by_ItemName(cls, name):
         return cls.query.filter_by(name = name).first()
