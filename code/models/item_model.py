@@ -26,6 +26,7 @@ class ItemModel(db.Model):
     def fetchAllItems(cls):
        # return {'items' : list(map(lambda item: item.json(), ItemModel.query.all()))}
         return {'items' : [item.json() for item in ItemModel.query.all()]}
+   
     @classmethod
     def find_by_ItemName(cls, name):
         return cls.query.filter_by(name = name).first()
