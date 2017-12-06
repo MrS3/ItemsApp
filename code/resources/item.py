@@ -9,6 +9,11 @@ class Item(Resource):
         required = True,
         help="This field cannot be left blank"
     )
+    parser.add_argument('store_id',
+    type = float,
+    required = True,
+    help = 'Need store ID'
+    )
 
     @jwt_required()
     def get(self, name):
@@ -21,7 +26,7 @@ class Item(Resource):
 
     def post(self, name):
         data = Item.parser.parse_args()
-        itemModel = ItemModel(name, data['price'])
+        itemModel = ItemModel(name, **data) ## **data = data['price'], data['store_id']
         if  ItemModel.find_by_ItemName(itemModel.name):
             return {'message': 'Item already exist'}, 400
 
@@ -37,7 +42,7 @@ class Item(Resource):
         itemModel = ItemModel.find_by_ItemName(name)
        
         if itemModel is None:
-             itemModel = ItemModel(name, data['price'])
+             itemModel = ItemModel(name, **data) ## **data = data['price'], data['store_id']
         else:
              itemModel.price = data['price']
        
